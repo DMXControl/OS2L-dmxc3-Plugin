@@ -1,6 +1,6 @@
 ﻿namespace Os2lPlugin
 {
-    public class Class1
+    public class Os2lPlugin
     {
     }
 }
