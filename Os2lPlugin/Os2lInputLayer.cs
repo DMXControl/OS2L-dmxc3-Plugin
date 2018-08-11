@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Beat;
 using org.dmxc.lumos.Kernel.Input;
