@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Beat;
 using org.dmxc.lumos.Kernel.Input;
 
@@ -62,9 +64,13 @@ namespace Os2lPlugin
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-                        // TODO: parse data, as quick demo just send beat for every message
-                        _beat.IncrementBeat();
+                        JObject obj = JObject.Parse(data);
+                        String evt = obj["evt"].Value<String>();
+                        if (evt == "beat") {
+                            _beat.IncrementBeat();
+                        }
+                        // TODO other events and other beat properties
+                        //Console.WriteLine("Received: {0}", data);
                     }
 
                     client.Close();
