@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -6,6 +7,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Beat;
 using org.dmxc.lumos.Kernel.Input;
+using org.dmxc.lumos.Kernel.Log;
 
 namespace Os2lPlugin
 {
@@ -40,7 +42,14 @@ namespace Os2lPlugin
             _server.Start();
 
             // TODO: check result, if false show information that probably Bonjour is not installed.
-            Os2lBonjour.os2l_init(OS2L_PORT_MIN);
+            if (!Os2lBonjour.os2l_init(OS2L_PORT_MIN)) {
+                KernelLogManager
+                    .getInstance()
+                    .sendUserNotification("OS2L Service could not be initialized!\n" +
+                                          "Please make sure that Bonjour is installed:\n" +
+                                          "https://support.apple.com/kb/DL999",
+                                          EventLogEntryType.Warning);
+            }
 
             _thread = new Thread(Listen);
             _thread.Start();
