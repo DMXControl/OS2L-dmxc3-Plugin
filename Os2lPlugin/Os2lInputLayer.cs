@@ -43,12 +43,27 @@ namespace Os2lPlugin
 
             _shutdown = false;
 
-            // TODO: find unused port between OS2L_PORT_MIN and OS2L_PORT_MAX
-            _server = new TcpListener(IPAddress.Any, OS2L_PORT_MIN);
-            _server.Start();
+            // find unused port between OS2L_PORT_MIN and OS2L_PORT_MAX
+            int port = OS2L_PORT_MIN;
+            bool started = false;
+            while (!started && port <= OS2L_PORT_MAX) {
+                try {
+                    _server = new TcpListener(IPAddress.Any, port);
+                    _server.Start();
+                    started = true;
+                    log.Info("OS2L Server listens on port {0}", port);
+                } catch (Exception e) {
+                    log.Info("Failed to listen on Port {0}", port);
+                    port++;
+                }
+            }
+            if (port > OS2L_PORT_MAX) {
+                log.Warn("OS2L Server start failed!");
+                return;
+            }
 
             // TODO: check result, if false show information that probably Bonjour is not installed.
-            if (!Os2lBonjour.os2l_init(OS2L_PORT_MIN)) {
+            if (!Os2lBonjour.os2l_init(port)) {
                 log.Warn("Bonjour init failed!");
                 KernelLogManager
                     .getInstance()
@@ -99,9 +114,9 @@ namespace Os2lPlugin
         public void Dispose()
         {
             _shutdown = true;
-            _server.Stop();
+            _server?.Stop();
             Os2lBonjour.os2l_close();
-            _thread.Join();
+            _thread?.Join();
         }
     }
 }
