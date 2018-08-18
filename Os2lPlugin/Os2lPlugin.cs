@@ -14,26 +14,22 @@ namespace Os2lPlugin
 
         public Os2lPlugin() : base(PLUGIN_ID, "OS2L Plugin")
         {
-            log.Info("Os2lPlugin()");
         }
 
         protected override void initializePlugin()
         {
-            log.Info("initializePlugin()");
         }
 
         protected override void startupPlugin()
         {
-            log.Info("startupPlugin()");
-
+            log.Debug("Register Os2lInputLayer");
             _inputLayer = new Os2lInputLayer();
             InputLayerManager.getInstance().registerInputLayer(_inputLayer);
         }
 
         protected override void shutdownPlugin()
         {
-            log.Info("shutdownPlugin()");
-
+            log.Debug("Deregister Os2lInputLayer");
             InputLayerManager.getInstance().deregisterInputLayer(_inputLayer);
             _inputLayer.Dispose();
             _inputLayer = null;

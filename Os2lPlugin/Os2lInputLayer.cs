@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
+using LumosLIB.Kernel.Log;
 using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Beat;
 using org.dmxc.lumos.Kernel.Input;
@@ -24,6 +25,8 @@ namespace Os2lPlugin
     {
         private const int OS2L_PORT_MIN = 8010;
         private const int OS2L_PORT_MAX = 8060;
+
+        private static readonly ILumosLog log = LumosLogger.getInstance<Os2lInputLayer>();
 
         private BeatChannel _beat;
 
@@ -46,6 +49,7 @@ namespace Os2lPlugin
 
             // TODO: check result, if false show information that probably Bonjour is not installed.
             if (!Os2lBonjour.os2l_init(OS2L_PORT_MIN)) {
+                log.Warn("Bonjour init failed!");
                 KernelLogManager
                     .getInstance()
                     .sendUserNotification("OS2L Service could not be initialized!\n" +
@@ -94,12 +98,10 @@ namespace Os2lPlugin
 
         public void Dispose()
         {
-            Console.WriteLine("### Dispose() start ###");
             _shutdown = true;
             _server.Stop();
             Os2lBonjour.os2l_close();
             _thread.Join();
-            Console.WriteLine("### Dispose() done ###");
         }
     }
 }
