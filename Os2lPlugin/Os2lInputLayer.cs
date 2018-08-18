@@ -27,6 +27,7 @@ namespace Os2lPlugin
 
         private BeatChannel _beat;
 
+        private bool _shutdown;
         private TcpListener _server;
         private Thread _thread;
 
@@ -36,6 +37,8 @@ namespace Os2lPlugin
             _beat = new BeatChannel("{ea70b486-544a-454b-941a-475c9cdd793a}", this);
             _beat.Name = "OS2L Beat";
             AddInputChannel(_beat);
+
+            _shutdown = false;
 
             // TODO: find unused port between OS2L_PORT_MIN and OS2L_PORT_MAX
             _server = new TcpListener(IPAddress.Any, OS2L_PORT_MIN);
@@ -57,13 +60,12 @@ namespace Os2lPlugin
 
         private void Listen()
         {
-            // TODO: use correct cleanup for blocking code and while true loop
             try
             {
                 Byte[] bytes = new Byte[1024];
                 String data = null;
 
-                while (true)
+                while (!_shutdown)
                 {
                     TcpClient client = _server.AcceptTcpClient();
                     NetworkStream stream = client.GetStream();
@@ -86,16 +88,17 @@ namespace Os2lPlugin
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                // _server.AcceptTcpClient() is a blocking call and throws an exception on _server.Stop()
             }
         }
 
         public void Dispose()
         {
             Console.WriteLine("### Dispose() start ###");
+            _shutdown = true;
             _server.Stop();
             Os2lBonjour.os2l_close();
-            _thread.Abort();
+            _thread.Join();
             Console.WriteLine("### Dispose() done ###");
         }
     }
