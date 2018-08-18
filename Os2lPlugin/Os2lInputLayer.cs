@@ -46,18 +46,24 @@ namespace Os2lPlugin
             // find unused port between OS2L_PORT_MIN and OS2L_PORT_MAX
             int port = OS2L_PORT_MIN;
             bool started = false;
-            while (!started && port <= OS2L_PORT_MAX) {
-                try {
+            while (!started && port <= OS2L_PORT_MAX)
+            {
+                try
+                {
                     _server = new TcpListener(IPAddress.Any, port);
                     _server.Start();
                     started = true;
                     log.Info("OS2L Server listens on port {0}", port);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     log.Info("Failed to listen on Port {0}", port);
                     port++;
                 }
             }
-            if (port > OS2L_PORT_MAX) {
+
+            if (port > OS2L_PORT_MAX)
+            {
                 log.Warn("OS2L Server start failed!");
                 return;
             }
@@ -65,7 +71,8 @@ namespace Os2lPlugin
             _thread = new Thread(Listen);
             _thread.Start();
 
-            if (!Os2lBonjour.os2l_init(port)) {
+            if (!Os2lBonjour.os2l_init(port))
+            {
                 log.Warn("Bonjour init failed!");
                 KernelLogManager
                     .getInstance()
@@ -94,9 +101,11 @@ namespace Os2lPlugin
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                         JObject obj = JObject.Parse(data);
                         String evt = obj["evt"].Value<String>();
-                        if (evt == "beat") {
+                        if (evt == "beat")
+                        {
                             _beat.IncrementBeat();
                         }
+
                         // TODO other events and other beat properties
                         //Console.WriteLine("Received: {0}", data);
                     }
