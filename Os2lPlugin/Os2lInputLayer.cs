@@ -62,7 +62,9 @@ namespace Os2lPlugin
                 return;
             }
 
-            // TODO: check result, if false show information that probably Bonjour is not installed.
+            _thread = new Thread(Listen);
+            _thread.Start();
+
             if (!Os2lBonjour.os2l_init(port)) {
                 log.Warn("Bonjour init failed!");
                 KernelLogManager
@@ -72,9 +74,6 @@ namespace Os2lPlugin
                                           "https://support.apple.com/kb/DL999",
                                           EventLogEntryType.Warning);
             }
-
-            _thread = new Thread(Listen);
-            _thread.Start();
         }
 
         private void Listen()
