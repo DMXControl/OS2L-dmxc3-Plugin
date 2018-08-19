@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using LumosLIB.Kernel.Log;
+using Mono.Zeroconf;
 using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Beat;
 using org.dmxc.lumos.Kernel.Input;
@@ -12,15 +13,6 @@ using org.dmxc.lumos.Kernel.Log;
 
 namespace Os2lPlugin
 {
-    static class Os2lBonjour
-    {
-        [DllImport("os2l_bonjour.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool os2l_init(int port);
-
-        [DllImport("os2l_bonjour.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool os2l_close();
-    }
-
     public class Os2lInputLayer : AbstractKernelInputLayer, IDisposable
     {
         private const int OS2L_PORT_MIN = 8010;
@@ -33,6 +25,7 @@ namespace Os2lPlugin
         private bool _shutdown;
         private TcpListener _server;
         private Thread _thread;
+        private RegisterService _zeroconfService;
 
         public Os2lInputLayer()
             : base(new InputID("{dc94cd84-66ac-474c-8e06-1202a604692a}", InputLayerManager.getInstance().SessionName), "OS2L")
@@ -71,7 +64,15 @@ namespace Os2lPlugin
             _thread = new Thread(Listen);
             _thread.Start();
 
-            if (!Os2lBonjour.os2l_init(port))
+            try
+            {
+                _zeroconfService = new RegisterService ();
+                _zeroconfService.Name = "DMXControl OS2L Server";
+                _zeroconfService.RegType = "_os2l._tcp";
+                _zeroconfService.Port = (short) port;
+                _zeroconfService.Register();
+            }
+            catch (Exception e)
             {
                 log.Warn("Bonjour init failed!");
                 KernelLogManager
@@ -122,8 +123,8 @@ namespace Os2lPlugin
         public void Dispose()
         {
             _shutdown = true;
+            _zeroconfService?.Dispose();
             _server?.Stop();
-            Os2lBonjour.os2l_close();
             _thread?.Join();
         }
     }
