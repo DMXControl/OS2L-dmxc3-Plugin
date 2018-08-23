@@ -29,10 +29,13 @@ namespace Os2lPlugin
 
         protected override void shutdownPlugin()
         {
-            log.Debug("Deregister Os2lInputLayer");
-            InputLayerManager.getInstance().deregisterInputLayer(_inputLayer);
-            _inputLayer.Dispose();
-            _inputLayer = null;
+            if (_inputLayer != null)
+            {
+                log.Debug("Deregister Os2lInputLayer");
+                InputLayerManager.getInstance().deregisterInputLayer(_inputLayer);
+                _inputLayer.Dispose();
+                _inputLayer = null;
+            }
         }
     }
 }
