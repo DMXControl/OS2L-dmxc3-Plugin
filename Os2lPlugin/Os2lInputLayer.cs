@@ -66,7 +66,7 @@ namespace Os2lPlugin
             try
             {
                 _zeroconfService = new RegisterService ();
-                _zeroconfService.Name = "DMXControl OS2L Server";
+                // Do not set Name option, default name is hostname.
                 _zeroconfService.RegType = "_os2l._tcp";
                 _zeroconfService.Port = (short) port;
                 _zeroconfService.Register();
