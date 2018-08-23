@@ -65,7 +65,7 @@ namespace Os2lPlugin
 
             try
             {
-                _zeroconfService = new RegisterService ();
+                _zeroconfService = new RegisterService();
                 // Do not set Name option, default name is hostname.
                 _zeroconfService.RegType = "_os2l._tcp";
                 _zeroconfService.Port = (short) port;
