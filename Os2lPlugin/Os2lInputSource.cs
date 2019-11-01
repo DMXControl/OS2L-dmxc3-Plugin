@@ -3,36 +3,30 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using LumosLIB.Kernel;
 using LumosLIB.Kernel.Log;
 using Mono.Zeroconf;
 using Newtonsoft.Json.Linq;
-using org.dmxc.lumos.Kernel.Beat;
-using org.dmxc.lumos.Kernel.Input;
+using org.dmxc.lumos.Kernel.Input.v2;
 using org.dmxc.lumos.Kernel.Log;
 
 namespace Os2lPlugin
 {
-    public class Os2lInputLayer : AbstractKernelInputLayer, IDisposable
+    public class Os2lInputSource : AbstractInputSource, IDisposable
     {
         private const int OS2L_PORT_MIN = 8010;
         private const int OS2L_PORT_MAX = 8060;
 
-        private static readonly ILumosLog log = LumosLogger.getInstance<Os2lInputLayer>();
-
-        private BeatChannel _beat;
+        private static readonly ILumosLog log = LumosLogger.getInstance<Os2lInputSource>();
 
         private bool _shutdown;
         private TcpListener _server;
         private Thread _thread;
         private RegisterService _zeroconfService;
 
-        public Os2lInputLayer()
-            : base(new InputID("{dc94cd84-66ac-474c-8e06-1202a604692a}", InputLayerManager.getInstance().SessionName), "OS2L")
+        public Os2lInputSource()
+            : base("{dc94cd84-66ac-474c-8e06-1202a604692a}", "Beat", new ParameterCategory("OS2L"))
         {
-            _beat = new BeatChannel("{ea70b486-544a-454b-941a-475c9cdd793a}", this);
-            _beat.Name = "OS2L Beat";
-            AddInputChannel(_beat);
-
             _shutdown = false;
 
             // find unused port between OS2L_PORT_MIN and OS2L_PORT_MAX
@@ -103,7 +97,14 @@ namespace Os2lPlugin
                         String evt = obj["evt"].Value<String>();
                         if (evt == "beat")
                         {
-                            _beat.IncrementBeat();
+                            if (!(this.CurrentValue is ulong))
+                            {
+                                this.CurrentValue = (ulong) 1;
+                            }
+                            else
+                            {
+                                this.CurrentValue = (ulong) this.CurrentValue + 1;
+                            }
                         }
 
                         // TODO other events and other beat properties
@@ -119,12 +120,18 @@ namespace Os2lPlugin
             }
         }
 
-        public void Dispose()
+        protected override void DisposeHook(bool disposing)
         {
+            base.DisposeHook(disposing);
+
             _shutdown = true;
             _zeroconfService?.Dispose();
             _server?.Stop();
             _thread?.Join();
         }
+
+        public override EWellKnownInputType AutoGraphIOType => EWellKnownInputType.BEAT;
+        public override object Min => ulong.MinValue;
+        public override object Max => ulong.MaxValue;
     }
 }

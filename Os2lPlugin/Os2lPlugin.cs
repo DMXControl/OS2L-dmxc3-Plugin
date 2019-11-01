@@ -1,5 +1,5 @@
 ﻿using LumosLIB.Kernel.Log;
-using org.dmxc.lumos.Kernel.Input;
+using org.dmxc.lumos.Kernel.Input.v2;
 using org.dmxc.lumos.Kernel.Plugin;
 
 namespace Os2lPlugin
@@ -10,7 +10,7 @@ namespace Os2lPlugin
 
         private static readonly ILumosLog log = LumosLogger.getInstance<Os2lPlugin>();
 
-        private Os2lInputLayer _inputLayer;
+        private Os2lInputSource _inputSource;
 
         public Os2lPlugin() : base(PLUGIN_ID, "OS2L Plugin")
         {
@@ -22,19 +22,19 @@ namespace Os2lPlugin
 
         protected override void startupPlugin()
         {
-            log.Debug("Register Os2lInputLayer");
-            _inputLayer = new Os2lInputLayer();
-            InputLayerManager.getInstance().registerInputLayer(_inputLayer);
+            log.Debug("Register Os2lInputSource");
+            _inputSource = new Os2lInputSource();
+            InputManager.getInstance().RegisterSource(_inputSource);
         }
 
         protected override void shutdownPlugin()
         {
-            if (_inputLayer != null)
+            if (_inputSource != null)
             {
-                log.Debug("Deregister Os2lInputLayer");
-                InputLayerManager.getInstance().deregisterInputLayer(_inputLayer);
-                _inputLayer.Dispose();
-                _inputLayer = null;
+                log.Debug("Unregister Os2lInputSource");
+                InputManager.getInstance().UnregisterSource(_inputSource);
+                _inputSource.Dispose();
+                _inputSource = null;
             }
         }
     }
