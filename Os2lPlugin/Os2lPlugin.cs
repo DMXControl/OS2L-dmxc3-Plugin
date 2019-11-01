@@ -20,6 +20,11 @@ namespace Os2lPlugin
 
         private static readonly ILumosLog log = LumosLogger.getInstance<Os2lPlugin>();
 
+        private static readonly ILumosLog seLog = new SingleExceptionDecorator(log)
+        {
+            ReLogCount = 10
+        };
+
         private Os2lBeatInputSource _beatInputSource;
         private Os2lBeatChangeInputSource _beatChangeInputSource;
         private Os2lBeatPosInputSource _beatPosInputSource;
@@ -169,15 +174,22 @@ namespace Os2lPlugin
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        JObject obj = JObject.Parse(data);
-                        String evt = obj["evt"].Value<String>();
-                        if (evt == "beat")
+                        try
                         {
-                            _beatInputSource.IncrementBeat();
-                            _beatChangeInputSource.SetChange(obj["change"].Value<bool>());
-                            _beatPosInputSource.SetPos(obj["pos"].Value<long>());
-                            _beatBpmInputSource.SetBpm(obj["bpm"].Value<double>());
-                            _beatStrengthInputSource.SetStrength(obj["strength"].Value<double>());
+                            JObject obj = JObject.Parse(data);
+                            String evt = obj["evt"].Value<String>();
+                            if (evt == "beat")
+                            {
+                                _beatInputSource.IncrementBeat();
+                                _beatChangeInputSource.SetChange(obj["change"].Value<bool>());
+                                _beatPosInputSource.SetPos(obj["pos"].Value<long>());
+                                _beatBpmInputSource.SetBpm(obj["bpm"].Value<double>());
+                                _beatStrengthInputSource.SetStrength(obj["strength"].Value<double>());
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            seLog.Warn(e.Message, e);
                         }
 
                         // TODO other events and other beat properties
