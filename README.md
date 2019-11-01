@@ -4,6 +4,10 @@ This plugin implements the OS2L protocol ([os2l.org](http://os2l.org/)) for DMXC
 OS2L allows audio software like VirtualDJ to send messages to DMX software like DMXControl. 
 Currently only beat messages are supported within this plugin.
 
+## Build
+- Build `Mono.Zeroconf` from [GitHub source](https://github.com/mono/Mono.Zeroconf).
+  The NuGet package is broken.
+
 ## Install
 - Copy the extracted dll-files to the Kernel plugin directory, i.e. `C:\Program Files (x86)\DMXControl3\Kernel\Plugins`.
 - Sometimes it is needed to right-click all ddl-files, select `Properties` and then click `Unblock`. 
