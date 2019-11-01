@@ -3,9 +3,9 @@ using org.dmxc.lumos.Kernel.Input.v2;
 
 namespace Os2lPlugin
 {
-    public class Os2lInputSource : AbstractInputSource
+    public class Os2lBeatInputSource : AbstractInputSource
     {
-        public Os2lInputSource()
+        public Os2lBeatInputSource()
             : base("{dc94cd84-66ac-474c-8e06-1202a604692a}", "Beat", new ParameterCategory("OS2L"))
         {
         }

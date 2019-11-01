@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Os2lInputSource.cs" />
+    <Compile Include="Os2lBeatInputSource.cs" />
     <Compile Include="Os2lPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

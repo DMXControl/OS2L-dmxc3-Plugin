@@ -20,7 +20,7 @@ namespace Os2lPlugin
 
         private static readonly ILumosLog log = LumosLogger.getInstance<Os2lPlugin>();
 
-        private Os2lInputSource _inputSource;
+        private Os2lBeatInputSource _beatInputSource;
 
         private bool _shutdown;
         private TcpListener _server;
@@ -37,9 +37,9 @@ namespace Os2lPlugin
 
         protected override void startupPlugin()
         {
-            log.Debug("Register Os2lInputSource");
-            _inputSource = new Os2lInputSource();
-            InputManager.getInstance().RegisterSource(_inputSource);
+            log.Debug("Register Os2lBeatInputSource");
+            _beatInputSource = new Os2lBeatInputSource();
+            InputManager.getInstance().RegisterSource(_beatInputSource);
 
             _shutdown = false;
 
@@ -98,12 +98,12 @@ namespace Os2lPlugin
             _server?.Stop();
             _thread?.Join();
 
-            if (_inputSource != null)
+            if (_beatInputSource != null)
             {
-                log.Debug("Unregister Os2lInputSource");
-                InputManager.getInstance().UnregisterSource(_inputSource);
-                _inputSource.Dispose();
-                _inputSource = null;
+                log.Debug("Unregister Os2lBeatInputSource");
+                InputManager.getInstance().UnregisterSource(_beatInputSource);
+                _beatInputSource.Dispose();
+                _beatInputSource = null;
             }
         }
 
@@ -127,7 +127,7 @@ namespace Os2lPlugin
                         String evt = obj["evt"].Value<String>();
                         if (evt == "beat")
                         {
-                            _inputSource.IncrementBeat();
+                            _beatInputSource.IncrementBeat();
                         }
 
                         // TODO other events and other beat properties
