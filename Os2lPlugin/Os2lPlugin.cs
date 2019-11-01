@@ -21,6 +21,10 @@ namespace Os2lPlugin
         private static readonly ILumosLog log = LumosLogger.getInstance<Os2lPlugin>();
 
         private Os2lBeatInputSource _beatInputSource;
+        private Os2lBeatChangeInputSource _beatChangeInputSource;
+        private Os2lBeatPosInputSource _beatPosInputSource;
+        private Os2lBeatBpmInputSource _beatBpmInputSource;
+        private Os2lBeatStrengthInputSource _beatStrengthInputSource;
 
         private bool _shutdown;
         private TcpListener _server;
@@ -39,7 +43,17 @@ namespace Os2lPlugin
         {
             log.Debug("Register Os2lBeatInputSource");
             _beatInputSource = new Os2lBeatInputSource();
-            InputManager.getInstance().RegisterSource(_beatInputSource);
+            _beatChangeInputSource = new Os2lBeatChangeInputSource();
+            _beatPosInputSource = new Os2lBeatPosInputSource();
+            _beatBpmInputSource = new Os2lBeatBpmInputSource();
+            _beatStrengthInputSource = new Os2lBeatStrengthInputSource();
+            InputManager.getInstance().RegisterSources(new IInputSource[]{
+                _beatInputSource,
+                _beatChangeInputSource,
+                _beatPosInputSource,
+                _beatBpmInputSource,
+                _beatStrengthInputSource
+            });
 
             _shutdown = false;
 
@@ -105,6 +119,38 @@ namespace Os2lPlugin
                 _beatInputSource.Dispose();
                 _beatInputSource = null;
             }
+
+            if (_beatChangeInputSource != null)
+            {
+                log.Debug("Unregister Os2lBeatChangeInputSource");
+                InputManager.getInstance().UnregisterSource(_beatChangeInputSource);
+                _beatChangeInputSource.Dispose();
+                _beatChangeInputSource = null;
+            }
+
+            if (_beatPosInputSource != null)
+            {
+                log.Debug("Unregister Os2lBeatPosInputSource");
+                InputManager.getInstance().UnregisterSource(_beatPosInputSource);
+                _beatPosInputSource.Dispose();
+                _beatPosInputSource = null;
+            }
+
+            if (_beatBpmInputSource != null)
+            {
+                log.Debug("Unregister Os2lBeatBpmInputSource");
+                InputManager.getInstance().UnregisterSource(_beatBpmInputSource);
+                _beatBpmInputSource.Dispose();
+                _beatBpmInputSource = null;
+            }
+
+            if (_beatStrengthInputSource != null)
+            {
+                log.Debug("Unregister Os2lBeatStrengthInputSource");
+                InputManager.getInstance().UnregisterSource(_beatStrengthInputSource);
+                _beatStrengthInputSource.Dispose();
+                _beatStrengthInputSource = null;
+            }
         }
 
         private void Listen()
@@ -128,6 +174,10 @@ namespace Os2lPlugin
                         if (evt == "beat")
                         {
                             _beatInputSource.IncrementBeat();
+                            _beatChangeInputSource.SetChange(obj["change"].Value<bool>());
+                            _beatPosInputSource.SetPos(obj["pos"].Value<long>());
+                            _beatBpmInputSource.SetBpm(obj["bpm"].Value<double>());
+                            _beatStrengthInputSource.SetStrength(obj["strength"].Value<double>());
                         }
 
                         // TODO other events and other beat properties
