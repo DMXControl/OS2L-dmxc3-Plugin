@@ -74,7 +74,7 @@ namespace Os2lPlugin
                     started = true;
                     log.Info("OS2L Server listens on port {0}", port);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     log.Info("Failed to listen on Port {0}", port);
                     port++;
@@ -194,7 +194,7 @@ namespace Os2lPlugin
                     client.Close();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // _server.AcceptTcpClient() is a blocking call and throws an exception on _server.Stop()
             }
