@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Os2lPlugin</RootNamespace>
     <AssemblyName>Os2lPlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,10 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lumos, Version=3.2.496.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Lumos">
       <HintPath>..\..\..\..\..\Program Files (x86)\DMXControl3\Kernel\Lumos.exe</HintPath>
     </Reference>
-    <Reference Include="LumosLIB, Version=3.2.496.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="LumosLIB">
       <HintPath>..\..\..\..\..\Program Files (x86)\DMXControl3\Kernel\LumosLIB.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Zeroconf, Version=4.0.0.90, Culture=neutral, PublicKeyToken=null">
@@ -44,9 +44,8 @@
     <Reference Include="Mono.Zeroconf.Providers.Bonjour, Version=4.0.0.90, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Mono.Zeroconf\bin\Mono.Zeroconf.Providers.Bonjour.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
