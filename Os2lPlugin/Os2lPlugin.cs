@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using LumosLIB.Kernel.Log;
-using Mono.Zeroconf;
+using Makaretu.Dns;
 using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Input.v2;
 using org.dmxc.lumos.Kernel.Log;
@@ -34,7 +34,7 @@ namespace Os2lPlugin
         private bool _shutdown;
         private TcpListener _server;
         private Thread _thread;
-        private RegisterService _zeroconfService;
+        private ServiceDiscovery _serviceDiscovery;
 
         public Os2lPlugin() : base(PLUGIN_ID, "OS2L Plugin")
         {
@@ -92,28 +92,23 @@ namespace Os2lPlugin
 
             try
             {
-                _zeroconfService = new RegisterService();
-                // Do not set Name option, default name is hostname.
-                _zeroconfService.RegType = "_os2l._tcp";
-                _zeroconfService.Port = (short) port;
-                _zeroconfService.Register();
+                _serviceDiscovery = new ServiceDiscovery();
+                var service = new ServiceProfile(Dns.GetHostName(), "_os2l._tcp", (ushort)port);
+                _serviceDiscovery.Advertise(service);
             }
             catch (Exception e)
             {
-                log.Warn("Bonjour init failed!");
+                log.Warn("Zeroconf init failed: {0}", e.Message);
                 KernelLogManager
                     .getInstance()
-                    .sendUserNotification("OS2L Service could not be initialized!\n" +
-                                          "Please make sure that Bonjour is installed:\n" +
-                                          "https://support.apple.com/kb/DL999",
-                                          EventLogEntryType.Warning);
+                    .sendUserNotification("OS2L Service could not be initialized!", EventLogEntryType.Warning);
             }
         }
 
         protected override void shutdownPlugin()
         {
             _shutdown = true;
-            _zeroconfService?.Dispose();
+            _serviceDiscovery?.Dispose();
             _server?.Stop();
             _thread?.Join();
 
