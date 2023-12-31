@@ -1,14 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using LumosLIB.Kernel.Log;
+﻿using LumosProtobuf;
 using Makaretu.Dns;
-using Newtonsoft.Json.Linq;
 using org.dmxc.lumos.Kernel.Input.v2;
 using org.dmxc.lumos.Kernel.Log;
 using org.dmxc.lumos.Kernel.Plugin;
+using Os2lPlugin.MessageFormats;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text.Json;
+using System.Threading;
+using K = LumosLIB.Kernel.Log;
 
 namespace Os2lPlugin
 {
@@ -18,9 +19,9 @@ namespace Os2lPlugin
         private const int OS2L_PORT_MIN = 8010;
         private const int OS2L_PORT_MAX = 8060;
 
-        private static readonly ILumosLog log = LumosLogger.getInstance<Os2lPlugin>();
+        private static readonly K.ILumosLog log = K.LumosLogger.getInstance<Os2lPlugin>();
 
-        private static readonly ILumosLog seLog = new SingleExceptionDecorator(log)
+        private static readonly K.ILumosLog seLog = new K.SingleExceptionDecorator(log)
         {
             ReLogCount = 10
         };
@@ -101,7 +102,7 @@ namespace Os2lPlugin
                 log.Warn("Zeroconf init failed: {0}", e.Message);
                 KernelLogManager
                     .getInstance()
-                    .sendUserNotification("OS2L Service could not be initialized!", EventLogEntryType.Warning);
+                    .sendUserNotification("OS2L Service could not be initialized!", ELogLevel.Warning);
             }
         }
 
@@ -116,7 +117,6 @@ namespace Os2lPlugin
             {
                 log.Debug("Unregister Os2lBeatInputSource");
                 InputManager.getInstance().UnregisterSource(_beatInputSource);
-                _beatInputSource.Dispose();
                 _beatInputSource = null;
             }
 
@@ -124,7 +124,6 @@ namespace Os2lPlugin
             {
                 log.Debug("Unregister Os2lBeatChangeInputSource");
                 InputManager.getInstance().UnregisterSource(_beatChangeInputSource);
-                _beatChangeInputSource.Dispose();
                 _beatChangeInputSource = null;
             }
 
@@ -132,7 +131,6 @@ namespace Os2lPlugin
             {
                 log.Debug("Unregister Os2lBeatPosInputSource");
                 InputManager.getInstance().UnregisterSource(_beatPosInputSource);
-                _beatPosInputSource.Dispose();
                 _beatPosInputSource = null;
             }
 
@@ -140,7 +138,6 @@ namespace Os2lPlugin
             {
                 log.Debug("Unregister Os2lBeatBpmInputSource");
                 InputManager.getInstance().UnregisterSource(_beatBpmInputSource);
-                _beatBpmInputSource.Dispose();
                 _beatBpmInputSource = null;
             }
 
@@ -148,7 +145,6 @@ namespace Os2lPlugin
             {
                 log.Debug("Unregister Os2lBeatStrengthInputSource");
                 InputManager.getInstance().UnregisterSource(_beatStrengthInputSource);
-                _beatStrengthInputSource.Dispose();
                 _beatStrengthInputSource = null;
             }
         }
@@ -171,15 +167,17 @@ namespace Os2lPlugin
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                         try
                         {
-                            JObject obj = JObject.Parse(data);
-                            String evt = obj["evt"].Value<String>();
-                            if (evt == "beat")
+                            var msg = JsonSerializer.Deserialize<OS2LMessage>(data);
+
+                            if (msg.Event == "beat")
                             {
                                 _beatInputSource.IncrementBeat();
-                                _beatChangeInputSource.SetChange(obj["change"].Value<bool>());
-                                _beatPosInputSource.SetPos(obj["pos"].Value<long>());
-                                _beatBpmInputSource.SetBpm(obj["bpm"].Value<double>());
-                                _beatStrengthInputSource.SetStrength(obj["strength"].Value<double>());
+                                var beatMsg = JsonSerializer.Deserialize<OS2LBeatMessage>(data);
+
+                                _beatChangeInputSource.SetChange(beatMsg.Change);
+                                _beatPosInputSource.SetPos(beatMsg.Position);
+                                _beatBpmInputSource.SetBpm(beatMsg.BPM);
+                                _beatStrengthInputSource.SetStrength(beatMsg.Strength);
                             }
                         }
                         catch (Exception e)

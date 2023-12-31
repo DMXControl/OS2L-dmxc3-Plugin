@@ -1,88 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{04725288-592C-4DC2-86F7-622141FF4CC0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Os2lPlugin</RootNamespace>
-    <AssemblyName>Os2lPlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Lumos">
-      <HintPath>..\..\..\..\..\Program Files (x86)\DMXControl3\Kernel\Lumos.exe</HintPath>
-    </Reference>
-    <Reference Include="LumosLIB">
-      <HintPath>..\..\..\..\..\Program Files (x86)\DMXControl3\Kernel\LumosLIB.dll</HintPath>
-    </Reference>
-    <Reference Include="Makaretu.Dns, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Makaretu.Dns.2.0.1\lib\net472\Makaretu.Dns.dll</HintPath>
-    </Reference>
-    <Reference Include="Makaretu.Dns.Multicast, Version=0.27.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Makaretu.Dns.Multicast.0.27.0\lib\net461\Makaretu.Dns.Multicast.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleBase, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleBase.1.3.1\lib\net45\SimpleBase.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.IPNetwork, Version=2.1.2.0, Culture=neutral, PublicKeyToken=717343cc2c25edcf, processorArchitecture=MSIL">
-      <HintPath>..\packages\IPNetwork2.2.1.2\lib\net46\System.Net.IPNetwork.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Os2lBeatBpmInputSource.cs" />
-    <Compile Include="Os2lBeatChangeInputSource.cs" />
-    <Compile Include="Os2lBeatInputSource.cs" />
-    <Compile Include="Os2lBeatPosInputSource.cs" />
-    <Compile Include="Os2lBeatStrengthInputSource.cs" />
-    <Compile Include="Os2lPlugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>10</LangVersion>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Makaretu.Dns" Version="2.0.1" />
+		<PackageReference Include="Makaretu.Dns.Multicast" Version="0.27.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	<Reference Include="Lumos">
+			<HintPath Condition="Exists('..\..\Lumos\3.3\Lumos\bin\Debug\net6.0')">..\..\Lumos\3.3\Lumos\bin\Debug\net6.0\Lumos.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\Lumos\bin\Debug\net6.0')">..\..\Lumos\Lumos\bin\Debug\net6.0\Lumos.dll</HintPath>
+			<HintPath Condition="Exists('..\dep')">..\dep\Lumos.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="LumosProtobuf">
+			<HintPath Condition="Exists('..\..\Lumos\3.3\LumosProtobuf\bin\Debug\netstandard2.0')">..\..\Lumos\3.3\LumosProtobuf\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\LumosProtobuf\bin\Debug\netstandard2.0')">..\..\Lumos\LumosProtobuf\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
+			<HintPath Condition="Exists('..\dep')">..\dep\LumosProtobuf.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="LumosLIB">
+			<HintPath Condition="Exists('..\..\Lumos\3.3\LumosLIB\bin\Debug\netstandard2.0')">..\..\Lumos\3.3\LumosLIB\bin\Debug\netstandard2.0\LumosLIB.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\LumosLIB\bin\Debug\netstandard2.0')">..\..\Lumos\LumosLIB\bin\Debug\netstandard2.0\LumosLIB.dll</HintPath>
+			<HintPath Condition="Exists('..\dep')">..\dep\LumosLIB.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="LumosToolsLIB">
+			<HintPath Condition="Exists('..\..\Lumos\3.3\LumosToolsLIB\bin\Debug\netstandard2.0')">..\..\Lumos\3.3\LumosToolsLIB\bin\Debug\netstandard2.0\LumosToolsLIB.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\LumosToolsLIB\bin\Debug\netstandard2.0')">..\..\Lumos\LumosToolsLIB\bin\Debug\netstandard2.0\LumosToolsLIB.dll</HintPath>
+			<HintPath Condition="Exists('..\dep')">..\dep\LumosToolsLIB.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+	</ItemGroup>
 </Project>
