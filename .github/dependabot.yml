@@ -6,14 +6,14 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/OS2L-dmxc3-Plugin/" # Location of package manifests
+    directory: "/Os2lPlugin/" # Location of package manifests
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5    
     target-branch: "main"
 
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/OS2L-dmxc3-Plugin/" # Location of package manifests
+    directory: "/Os2lPlugin/" # Location of package manifests
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5    
