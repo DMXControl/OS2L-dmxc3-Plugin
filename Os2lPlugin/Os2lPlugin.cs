@@ -8,6 +8,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using K = LumosLIB.Kernel.Log;
 
@@ -167,16 +168,26 @@ namespace Os2lPlugin
                         data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                         try
                         {
-                            var msg = JsonSerializer.Deserialize<OS2LMessage>(data);
+                            JsonNode messageNode = JsonNode.Parse(data)!;
 
-                            if (msg.Event == "beat")
+                            string evt = "";
+                            try
                             {
-                                _beatInputSource.IncrementBeat();
+                                evt = messageNode["evt"].GetValue<string>();
+                            }
+                            catch
+                            {
+                                // The JSON parameter "evt" is not in the message so it seems to not be a propper OS2L message
+                            }
+
+                            if (evt == "beat")
+                            {
                                 var beatMsg = JsonSerializer.Deserialize<OS2LBeatMessage>(data);
 
+                                _beatInputSource.IncrementBeat();
                                 _beatChangeInputSource.SetChange(beatMsg.Change);
                                 _beatPosInputSource.SetPos(beatMsg.Position);
-                                _beatBpmInputSource.SetBpm(beatMsg.BPM);
+                                _beatBpmInputSource.SetBpm(beatMsg.Bpm);
                                 _beatStrengthInputSource.SetStrength(beatMsg.Strength);
                             }
                         }
