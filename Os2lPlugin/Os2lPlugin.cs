@@ -180,24 +180,35 @@ namespace Os2lPlugin
                                 // The JSON parameter "evt" is not in the message so it seems to not be a propper OS2L message
                             }
 
-                            if (evt == "beat")
+                            switch(evt)
                             {
-                                var beatMsg = JsonSerializer.Deserialize<OS2LBeatMessage>(data);
+                                case "beat":
+                                    var beatMsg = JsonSerializer.Deserialize<OS2LBeatMessage>(data);
 
-                                _beatInputSource.IncrementBeat();
-                                _beatChangeInputSource.SetChange(beatMsg.Change);
-                                _beatPosInputSource.SetPos(beatMsg.Position);
-                                _beatBpmInputSource.SetBpm(beatMsg.Bpm);
-                                _beatStrengthInputSource.SetStrength(beatMsg.Strength);
+                                    _beatInputSource.IncrementBeat();
+                                    _beatChangeInputSource.SetChange(beatMsg.Change);
+                                    _beatPosInputSource.SetPos(beatMsg.Position);
+                                    _beatBpmInputSource.SetBpm(beatMsg.Bpm);
+                                    _beatStrengthInputSource.SetStrength(beatMsg.Strength);
+                                    break;
+                                case "button":
+                                    var buttonMsg = JsonSerializer.Deserialize<OS2LButtonMessage>(data);
+
+                                    // TODO other events and other beat properties
+
+                                    break;
+                                case "command":
+                                    var commandMsg = JsonSerializer.Deserialize<OS2LCommandMessage>(data);
+
+                                    // TODO other events and other beat properties
+
+                                    break;
                             }
                         }
                         catch (Exception e)
                         {
                             seLog.Warn(e.Message, e);
                         }
-
-                        // TODO other events and other beat properties
-                        //Console.WriteLine("Received: {0}", data);
                     }
 
                     client.Close();
