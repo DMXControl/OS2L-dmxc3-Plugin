@@ -75,10 +75,9 @@ pipeline {
 				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\Common.Logging.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
 				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\Makaretu.Dns.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
 				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\Makaretu.Dns.Multicast.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
-				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\Microsoft.Bcl.AsyncInterfaces.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
 				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\SimpleBase.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
-				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\System.Net.IPNetwork.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
-				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\System.ObjectModel.dll\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
+				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\Microsoft.*\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
+				bat "xcopy \"$WORKSPACE\\Os2lPlugin\\bin\\Release\\netstandard2.0\\System.*\" \"$WORKSPACE\\output\\dependencies\\\" /F /R /Y /I"
 				
 				dir('output') {
 					archiveArtifacts artifacts: '**/*.*'
