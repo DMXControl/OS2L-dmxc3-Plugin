@@ -23,14 +23,14 @@
 	</ItemGroup>
 	<ItemGroup>
 	<Reference Include="Lumos">
-			<HintPath Condition="Exists('..\..\Lumos\3.3\Lumos\bin\Debug\net6.0')">..\..\Lumos\3.3\Lumos\bin\Debug\net6.0\Lumos.dll</HintPath>
-			<HintPath Condition="Exists('..\..\Lumos\Lumos\bin\Debug\net6.0')">..\..\Lumos\Lumos\bin\Debug\net6.0\Lumos.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\3.3\Lumos\bin\Debug\net8.0')">..\..\Lumos\3.3\Lumos\bin\Debug\net8.0\Lumos.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\Lumos\bin\Debug\net8.0')">..\..\Lumos\Lumos\bin\Debug\net8.0\Lumos.dll</HintPath>
 			<HintPath Condition="Exists('..\dep')">..\dep\Lumos.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="LumosProtobuf">
-			<HintPath Condition="Exists('..\..\Lumos\3.3\LumosProtobuf\bin\Debug\netstandard2.0')">..\..\Lumos\3.3\LumosProtobuf\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
-			<HintPath Condition="Exists('..\..\Lumos\LumosProtobuf\bin\Debug\netstandard2.0')">..\..\Lumos\LumosProtobuf\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\3.3\LumosProtobuf\csharp\bin\Debug\netstandard2.0')">..\..\Lumos\3.3\LumosProtobuf\csharp\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
+			<HintPath Condition="Exists('..\..\Lumos\LumosProtobuf\csharp\bin\Debug\netstandard2.0')">..\..\Lumos\LumosProtobuf\csharp\bin\Debug\netstandard2.0\LumosProtobuf.dll</HintPath>
 			<HintPath Condition="Exists('..\dep')">..\dep\LumosProtobuf.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
